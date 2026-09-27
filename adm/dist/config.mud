@@ -16,10 +16,10 @@ external_port_1: telnet 1336
 #mud ip : 0.0.0.0
 
 # absolute pathname of mudlib
-mudlib directory : /mud/ox/lib
+mudlib directory : /home/andrew/EOTS
 
 # debug.log and author/domain stats are stored here
-log directory : /mud/ox/lib/log
+log directory : /home/andrew/EOTS/log
 
 # the directories which are searched by #include <...>
 # for multiple dirs, separate each path with a ':'
@@ -62,7 +62,14 @@ maximum local variables : 100
 
 # Maximum amount of 'eval cost' per thread - execution is halted when
 # it is exceeded.
-maximum evaluation cost : 500000
+# Fixed 2026-09-27 (Claude): was 500000 (0.5 sec) -- far too tight for a
+# cold multi-file compile, and inconsistent with the 300000000 (300 sec)
+# in the template this file is generated from (adm/etc/config.github).
+# Confirmed this was the last of three compounding bugs causing eval-cost
+# aborts on character creation; see project notes for the other two
+# (std/modules/race/race.lpc: bad allocate_mapping() call, and a
+# malformed module path in set_race()).
+maximum evaluation cost : 300000000
 
 # This is the maximum array size allowed for one single array.
 maximum array size : 15000

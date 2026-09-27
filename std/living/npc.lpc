@@ -28,7 +28,12 @@ void mudlib_setup() {
     rehash_capacity();
     add_init("start_heart_beat");
     add_hb("stop_heart_beat");
-    add_module("std/modules/mob/combat_memory");
+    // add_module() resolves its argument relative to DIR_STD_MODULES
+    // itself, so this must be bare ("mob/combat_memory"), not
+    // "std/modules/mob/combat_memory" — the same malformed-path bug
+    // fixed in std/living/race.lpc's set_race() (2026-09-27). See
+    // Oxidus Local Patches doc.
+    add_module("mob/combat_memory");
   }
 }
 

@@ -17,7 +17,12 @@ private nomask nosave string __race;
 private string __gender;
 
 public string set_race(string race) {
-  string module_path = "std/modules/race/" + race;
+  // add_module() resolves its argument relative to DIR_STD_MODULES itself,
+  // so this must be bare ("race/human"), not "std/modules/race/human" —
+  // that double-specified, non-absolute path was what add_module() was
+  // handed before, which sent new() into whatever it is that hangs the
+  // driver's compiler (see /std/object/module.lpc's add_module()).
+  string module_path = "race/" + race;
   object mod;
 
   if(!file_exists(racial_bodies + race + ".lpc")) {

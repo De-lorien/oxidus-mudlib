@@ -40,7 +40,7 @@ string covered_by_slot(string part);
 
 protected nosave string __race;
 protected nosave mapping __regen_rate = ([ "hp" : 0.0, "sp" : 0.0, "mp" : 0.0 ]);
-protected nosave mapping __attribute_mod = allocate_mapping(mud_config("ATTRIBUTES"), 0);
+protected nosave mapping __attribute_mod = ([ ]);
 
 // This is a mapping of body parts and their target sizes on the body.
 // Each body part has an array of two integers. The first integer is the
@@ -80,6 +80,17 @@ protected nosave mapping body_part_modifiers = ([ ]);
 protected nosave mapping equipment_slots = ([ ]);
 
 void base_setup() {
+  string attr;
+
+  // __attribute_mod was previously seeded via
+  // allocate_mapping(mud_config("ATTRIBUTES"), 0) — a bug: ATTRIBUTES is
+  // an array of attribute names (see default.lpml), not an int, so
+  // allocate_mapping() was being handed the wrong type for its size
+  // argument. This mirrors the correct pattern already used in
+  // /std/living/attributes.lpc's init_attributes().
+  foreach(attr in mud_config("ATTRIBUTES"))
+    __attribute_mod[attr] = 0;
+
   module_name = "race";
 }
 
